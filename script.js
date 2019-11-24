@@ -1,3 +1,34 @@
+const buttons = document.querySelectorAll(".container button");
+const display = document.querySelector("#display");
+const equals = document.querySelector("#equals");
+const operators = document.querySelectorAll(".operators");
+//display.textContent = "";
+
+buttons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        console.log(e);
+        appendDisplay(e.target.textContent);
+    })
+})
+
+function appendDisplay(anotherValue) {
+    let orginialValue = display.textContent;
+    display.textContent = orginialValue + anotherValue;
+}
+
+function getDisplayValue(){
+    
+}
+
+function checkForOperator(input){
+ //   if(input is operator){
+ //       let previousValue = 
+//    }
+      
+}
+
+//let displayValue = 
+
 function add(a, b) {
     return a + b;
 }

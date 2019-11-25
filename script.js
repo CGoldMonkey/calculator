@@ -1,23 +1,61 @@
 const buttons = document.querySelectorAll(".container button");
 const display = document.querySelector("#display");
-const equals = document.querySelector("#equals");
-const operators = document.querySelectorAll(".operators");
+const mathExpression = [];
+const operators = /\+|-|x|÷/;
+let currentNumber = "";
+
+//const equals = document.querySelector("#equals");
+//const operators = document.querySelectorAll(".operators");
 //display.textContent = "";
 
 buttons.forEach(button => {
     button.addEventListener('click', (e) => {
-        console.log(e);
-        appendDisplay(e.target.textContent);
+        console.log(button);
+        let input = button.textContent;
+        
+         //if operator then save the number and operator
+         if(operators.test(input)){
+            mathExpression.push({number: currentNumber, operator: input});
+            currentNumber = "";
+        } else if(input === "=") {
+            mathExpression.push({number: currentNumber});
+            currentNumber = "";
+
+            //call operate on the numbers: *and / operater, then + -
+        //    let sum = mathExpression
+            if(mathExpression.some(checkMultiplyDivide)) {
+         /*   if(mathExpression.some(expression => {
+                return expression.operator === "x" || expression.operator === "÷"})) {
+                console.log("x or divide after =");
+            }   */   
+                console.log("x or divide after =");
+            }
+
+        } else {
+            currentNumber += input;
+        }
+        appendDisplay(button.textContent);
+        console.log("currentNumber: "+currentNumber);
+        console.table(mathExpression);
+
     })
 })
+
+function checkMultiplyDivide(expressionObj){
+    return expressionObj.operator === "x" || expressionObj.operator === "÷"
+}
 
 function appendDisplay(anotherValue) {
     let orginialValue = display.textContent;
     display.textContent = orginialValue + anotherValue;
 }
 
-function getDisplayValue(){
+function getDisplayValue() {
     
+}
+
+function setCurrentNumber() {
+
 }
 
 function checkForOperator(input){
@@ -45,7 +83,7 @@ function divide(a, b){
     return a / b;
 }
 
-function operate(first, second, operator) {
+function operate(first, operator, second) {
     let result;
     switch (operator) {
         case '+':
@@ -54,10 +92,10 @@ function operate(first, second, operator) {
         case '-':
             result = subtract(first, second);
             break;
-        case '*':
+        case 'x':
             result = multiply(first, second);
             break;
-        case '/':
+        case '÷':
             result = divide(first, second);
             break;
         default:

@@ -11,24 +11,21 @@ let currentNumber = "";
 buttons.forEach(button => {
     button.addEventListener('click', (e) => {
         let input = button.textContent;
-        appendDisplay(button.textContent);
-        
+        appendDisplay(input);
+   
          //if operator then save the number and operator
         if(operators.test(input)){
             mathExpression.push({number: currentNumber, operator: input});
             currentNumber = "";
         } else if(input === "=") {
             mathExpression.push({number: currentNumber});
-            currentNumber = "";
-
+        //    currentNumber = "";
            //call operate on the numbers: *and / operater, then + -
-
             while(mathExpression.some(checkMultiplyDivide)) {
                let multOrDivideIndex = mathExpression.findIndex(checkMultiplyDivide);
                let sum = sumOfNumbersToRight(multOrDivideIndex);
                updateMathExpression(sum, multOrDivideIndex);
             }
-
             while(mathExpression.length > 1) {
                 let beginningIndex = 0;
                 let sum = sumOfNumbersToRight(beginningIndex);
@@ -36,12 +33,13 @@ buttons.forEach(button => {
             }
             //dispay final number
             appendDisplay(mathExpression[0].number)
+            currentNumber = mathExpression[0].number;
+            mathExpression = [];
 
         } else {
             currentNumber += input;
         }
         console.table(mathExpression);
-
     })
 })
 
@@ -49,7 +47,6 @@ function sumOfNumbersToRight (index) {
     let current = mathExpression[index];
     let second = mathExpression[index + 1];
     let sum = operate(current.number, current.operator, second.number);
-
     return sum;
 }
 
@@ -65,26 +62,8 @@ function checkMultiplyDivide(expressionObj){
 }
 
 function appendDisplay(anotherValue) {
-    let orginialValue = display.textContent;
-    display.textContent = orginialValue + anotherValue;
+    display.textContent += anotherValue;
 }
-
-function getDisplayValue() {
-    
-}
-
-function setCurrentNumber() {
-
-}
-
-function checkForOperator(input){
- //   if(input is operator){
- //       let previousValue = 
-//    }
-      
-}
-
-//let displayValue = 
 
 function add(a, b) {
     return parseInt(a) + parseInt(b);

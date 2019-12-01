@@ -25,15 +25,19 @@ buttons.forEach(button => {
                let multOrDivideIndex = mathExpression.findIndex(checkMultiplyDivide);
                let sum = sumOfNumbersToRight(multOrDivideIndex);
                updateMathExpression(sum, multOrDivideIndex);
+               console.table(mathExpression);
             }
             while(mathExpression.length > 1) {
                 let beginningIndex = 0;
                 let sum = sumOfNumbersToRight(beginningIndex);
                 updateMathExpression(sum, beginningIndex);
+                console.table(mathExpression);
             }
             //dispay final number
-            appendDisplay(mathExpression[0].number)
-            currentNumber = mathExpression[0].number;
+            mathExpression[0].number = roundToThousandths(mathExpression[0].number);
+            let finalNumber = mathExpression[0].number;
+            appendDisplay(finalNumber)
+            currentNumber = finalNumber;
             mathExpression = [];
 
         } else {
@@ -43,7 +47,11 @@ buttons.forEach(button => {
     })
 })
 
-function sumOfNumbersToRight (index) {
+function roundToThousandths(number){
+    return Math.round(number*1000)/1000;
+}
+
+function sumOfNumbersToRight(index) {
     let current = mathExpression[index];
     let second = mathExpression[index + 1];
     let sum = operate(current.number, current.operator, second.number);
@@ -66,7 +74,7 @@ function appendDisplay(anotherValue) {
 }
 
 function add(a, b) {
-    return parseInt(a) + parseInt(b);
+    return parseFloat(a) + parseFloat(b);
 }
 
 function subtract(a, b) {

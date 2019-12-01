@@ -62,6 +62,12 @@ function roundToThousandths(number){
 function sumOfNumbersToRight(index) {
     let current = mathExpression[index];
     let second = mathExpression[index + 1];
+    if(current.operator == '÷' && second.number == 0){
+    //    clearDisplay();
+        display.textContent = "Can't divide by 0, CLEAR display to try again!!!";
+        //return;
+
+    }
     let sum = operate(current.number, current.operator, second.number);
     return sum;
 }

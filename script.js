@@ -17,6 +17,8 @@ buttons.forEach(button => {
         if(operators.test(input)){
             mathExpression.push({number: currentNumber, operator: input});
             currentNumber = "";
+        } else if(input === "CLEAR") {
+            clearDisplay();
         } else if(input === "=") {
             mathExpression.push({number: currentNumber});
         //    currentNumber = "";
@@ -46,6 +48,12 @@ buttons.forEach(button => {
         console.table(mathExpression);
     })
 })
+
+function clearDisplay() {
+    display.textContent = "";
+    currentNumber = "";
+    mathExpression = [];
+}
 
 function roundToThousandths(number){
     return Math.round(number*1000)/1000;

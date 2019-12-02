@@ -1,8 +1,10 @@
 const buttons = document.querySelectorAll(".container button");
 const display = document.querySelector("#display");
+const decimalButton = document.querySelector("#decimal");
 let mathExpression = [];
 const operators = /\+|-|x|÷/;
 let currentNumber = "";
+let divideByZero = false;
 
 //const equals = document.querySelector("#equals");
 //const operators = document.querySelectorAll(".operators");
@@ -23,36 +25,57 @@ buttons.forEach(button => {
             mathExpression.push({number: currentNumber});
         //    currentNumber = "";
            //call operate on the numbers: *and / operater, then + -
-            while(mathExpression.some(checkMultiplyDivide)) {
-               let multOrDivideIndex = mathExpression.findIndex(checkMultiplyDivide);
-               let sum = sumOfNumbersToRight(multOrDivideIndex);
-               updateMathExpression(sum, multOrDivideIndex);
-               console.table(mathExpression);
+            evaluateExpression: {
+                while(mathExpression.some(checkMultiplyDivide)) {
+  //                  let divideByZero = false;
+                    let multOrDivideIndex = mathExpression.findIndex(checkMultiplyDivide);
+                    let sum = sumOfNumbersToRight(multOrDivideIndex);
+                    if (divideByZero === true) {
+                        break evaluateExpression;
+                    }                    
+                    updateMathExpression(sum, multOrDivideIndex);
+                    console.table(mathExpression);
+                }
+                while(mathExpression.length > 1) {
+                    let beginningIndex = 0;
+                    let sum = sumOfNumbersToRight(beginningIndex);
+                    updateMathExpression(sum, beginningIndex);
+                    console.table(mathExpression);
+                }
+                //dispay final number
+                mathExpression[0].number = roundToThousandths(mathExpression[0].number);
+                let finalNumber = mathExpression[0].number;
+                appendDisplay(finalNumber)
+                currentNumber = finalNumber;
+                mathExpression = [];
             }
-            while(mathExpression.length > 1) {
-                let beginningIndex = 0;
-                let sum = sumOfNumbersToRight(beginningIndex);
-                updateMathExpression(sum, beginningIndex);
-                console.table(mathExpression);
-            }
-            //dispay final number
-            mathExpression[0].number = roundToThousandths(mathExpression[0].number);
-            let finalNumber = mathExpression[0].number;
-            appendDisplay(finalNumber)
-            currentNumber = finalNumber;
-            mathExpression = [];
 
         } else {
             currentNumber += input;
+
+            //problems with starting off with a decimal point
+            //probably better to make function of our own
+            if(currentNumber.includes(".")){
+                decimalButton.disabled = true;
+            } else {
+                decimalButton.disabled = false;
+            }
         }
         console.table(mathExpression);
     })
 })
 
+function divisionByZero() {
+    display.textContent = "Can't divide by 0, CLEAR display to try again!!!";
+    divideByZero = true;
+    
+}
+
 function clearDisplay() {
     display.textContent = "";
     currentNumber = "";
     mathExpression = [];
+    divideByZero = false;
 }
 
 function roundToThousandths(number){
@@ -64,9 +87,7 @@ function sumOfNumbersToRight(index) {
     let second = mathExpression[index + 1];
     if(current.operator == '÷' && second.number == 0){
     //    clearDisplay();
-        display.textContent = "Can't divide by 0, CLEAR display to try again!!!";
-        //return;
-
+        divisionByZero();
     }
     let sum = operate(current.number, current.operator, second.number);
     return sum;

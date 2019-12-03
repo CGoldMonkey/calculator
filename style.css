@@ -4,3 +4,9 @@
     grid-template-rows: repeat(5, 1fr);
     
 }
+
+#display {
+    width: 200px;
+    height: 40px;
+    border: 1px solid black;
+}

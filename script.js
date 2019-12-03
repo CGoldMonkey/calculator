@@ -13,12 +13,17 @@ let divideByZero = false;
 buttons.forEach(button => {
     button.addEventListener('click', (e) => {
         let input = button.textContent;
+
+        console.log("Beginning CurNum: "+currentNumber);
+
+
         appendDisplay(input);
    
          //if operator then save the number and operator
         if(operators.test(input)){
             mathExpression.push({number: currentNumber, operator: input});
             currentNumber = "";
+            decimalButton.disabled = false;
         } else if(input === "CLEAR") {
             clearDisplay();
         } else if(input === "=") {
@@ -47,23 +52,34 @@ buttons.forEach(button => {
                 let finalNumber = mathExpression[0].number;
                 appendDisplay(finalNumber)
                 currentNumber = finalNumber;
+                checkForDecimal(currentNumber.toString());
                 mathExpression = [];
             }
 
         } else {
             currentNumber += input;
+            console.log("Current Num: "+currentNumber);
+            checkForDecimal(currentNumber);
 
             //problems with starting off with a decimal point
             //probably better to make function of our own
-            if(currentNumber.includes(".")){
+    /*        if(currentNumber.includes(".")){
                 decimalButton.disabled = true;
             } else {
                 decimalButton.disabled = false;
-            }
+            }*/
         }
         console.table(mathExpression);
     })
 })
+
+function checkForDecimal(number) {
+    if(number.includes(".")) {
+        decimalButton.disabled = true;
+    } else {
+        decimalButton.disabled = false;
+    }
+}
 
 function divisionByZero() {
     display.textContent = "Can't divide by 0, CLEAR display to try again!!!";
@@ -76,6 +92,7 @@ function clearDisplay() {
     currentNumber = "";
     mathExpression = [];
     divideByZero = false;
+    decimalButton.disabled = false;
 }
 
 function roundToThousandths(number){

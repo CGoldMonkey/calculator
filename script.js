@@ -29,9 +29,26 @@ buttons.forEach(button => {
         } else if (input === "CLEAR") {
             clearDisplay();
         } else if (input === "⌫") {
-            console.log("At BACKSPACE");
+            
             //CHANGE EXPRESSION
+            if(currentNumber.length > 0) { //if current number isn't empty then bacspace current number
+                currentNumber = currentNumber.slice(0, currentNumber.length - 1);
+                console.log("Changing current Num Backspace: "+currentNumber);
+            } else if (mathExpression.length !== 0) {
+                //if operator isn't empty delete that
+                let lastIndex = mathExpression.length - 1;
+                //check operator and delete it
+                currentNumber = mathExpression[lastIndex].number;
+                mathExpression.pop();
+                console.table(mathExpression);
+
+                //check num and subtract by one//i.e set the current num
+
+                //set the current num, delete last array
+
+            } 
             //CHANGE DISPLAY
+            backspaceDisplay();
 
         } else if (input === "=") {
             mathExpression.push({ number: currentNumber });
@@ -57,7 +74,8 @@ buttons.forEach(button => {
                 //dispay final number
                 mathExpression[0].number = roundToThousandths(mathExpression[0].number);
                 let finalNumber = mathExpression[0].number;
-                appendDisplay(finalNumber)
+                //appendDisplay(finalNumber)
+                display.textContent = finalNumber;
                 currentNumber = finalNumber;
                 checkForDecimal(currentNumber.toString());
                 mathExpression = [];
@@ -80,6 +98,11 @@ buttons.forEach(button => {
     })
 })
 
+function backspaceDisplay(){
+    displayLength = display.textContent.length;
+    display.textContent = display.textContent.slice(0, displayLength - 1);
+}
+
 function checkForDecimal(number) {
     if (number.includes(".")) {
         decimalButton.disabled = true;
@@ -91,7 +114,6 @@ function checkForDecimal(number) {
 function divisionByZero() {
     display.textContent = "Can't divide by 0, CLEAR display to try again!!!";
     divideByZero = true;
-
 }
 
 function clearDisplay() {

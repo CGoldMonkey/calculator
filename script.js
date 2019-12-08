@@ -1,4 +1,4 @@
-const buttons = document.querySelectorAll(".container button");
+const buttons = document.querySelectorAll(".buttonContainer button");
 const display = document.querySelector("#display");
 const decimalButton = document.querySelector("#decimal");
 let mathExpression = [];
@@ -24,7 +24,7 @@ buttons.forEach(button => {
             mathExpression.push({ number: currentNumber, operator: input });
             currentNumber = "";
             decimalButton.disabled = false;
-        } else if (input === "CLEAR") {
+        } else if (input === "AC") {
             clearDisplay();
         } else if (input === "⌫") {
             //CHANGE EXPRESSION

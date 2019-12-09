@@ -3,10 +3,13 @@ body {
 }
 
 .calculator {
+
     border: 1px solid rgb(192, 255, 213);
+
+
     width: 500px;
     height: 500px;
-    background-color: rgb(64, 64, 104);
+    background-color: rgb(117, 117, 117);
     border-radius: 20px;
     padding: 20px;
     margin: 0 auto;
@@ -22,8 +25,8 @@ body {
     /
     width: 500px;
     /
-    background-color: rgb(64, 64, 104); */
-    border: 1px solid orange;
+    background-color: rgb(64, 64, 104);  */
+    border: 1px solid orange; 
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     height: 400px;
@@ -34,18 +37,33 @@ body {
 } 
 
 #display {
-    width:500px;
+    width: 400px;
     height: 40px;
+    margin: 0 auto;
+
     border: 1px solid black;
-    background-color: gray; 
+
+    background-color: rgb(143, 196, 186); 
     border-radius: 10px;
+
+    margin-top: 30px;
+
+    color: white;
+    font-size: 20px;
+
+    padding-top: 15px;
+    padding-left: 10px;
+
     margin-bottom: 20px;
 
+    /*padding-top: 20px;
+    padding-bottom: 20px; */
 }
 
 button {
     width: 80px;
     height: 50px;
     border-radius: 5px;
+
 
 }

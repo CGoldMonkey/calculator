@@ -3,9 +3,7 @@ body {
 }
 
 .calculator {
-
     border: 1px solid rgb(192, 255, 213);
-
 
     width: 500px;
     height: 500px;
@@ -13,11 +11,11 @@ body {
     border-radius: 20px;
     padding: 20px;
     margin: 0 auto;
-    margin-top: 100px;
-    
+    margin-top: 100px; 
 }
 
 .buttonContainer {
+    margin: 0 auto;
    /*
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -31,7 +29,10 @@ body {
     grid-template-columns: repeat(4, 1fr);
     height: 400px;
 
+    /*width: 400px; */
+
     justify-items: center;
+
 
 
   /*  padding: 20px;
@@ -44,7 +45,7 @@ body {
     text-align: right;
     width: 400px;
     height: 40px;
-    margin: 0 auto;
+    margin: 0 auto; 
 
     border: 1px solid black;
 
@@ -75,6 +76,7 @@ button {
     height: 50px; 
     border-radius: 5px;
     border: none;
+    background-color: rgb(196, 208, 230);
 
 
 }
@@ -90,3 +92,10 @@ button:hover {
 .number {
     background-color: rgb(159, 172, 156);
 }
+.grid-item {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+  }

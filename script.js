@@ -2,21 +2,31 @@ const buttons = document.querySelectorAll(".buttonContainer button");
 const display = document.querySelector("#display");
 const decimalButton = document.querySelector("#decimal");
 let mathExpression = [];
-const operators = /\+|-|x|÷/;
+const operators = /\+|-|x|\*|\/|÷/;
 let currentNumber = "";
 let divideByZero = false;
+let noDecimal = true;
 
-//const equals = document.querySelector("#equals");
-//const operators = document.querySelectorAll(".operators");
-//display.textContent = "";
+window.addEventListener('keydown', (e) => {
+    let keyInput = e.key;
+    let validInput = /\d|\.|Backspace|Enter/;
+    
+    if(validInput.test(keyInput)||operators.test(keyInput)) {
+        console.log(keyInput);
+        if(keyInput !== '.' || noDecimal) {
+            callCalculator(keyInput);
+        }
+    }
+})
 
 buttons.forEach(button => {
-    button.addEventListener('click', callCalculator)})
-    
-function callCalculator() {
-    let input = this.textContent;
+    button.addEventListener('click', (e) => {
+        let buttonInput  = e.target.textContent;
+        callCalculator(buttonInput);
+    })})
 
-    if (input !== '⌫') {
+function callCalculator(input) {
+    if (!(input === '⌫' || input === 'Backspace')) {
         appendDisplay(input);
     }
     //if operator then save the number and operator
@@ -25,10 +35,10 @@ function callCalculator() {
         currentNumber = "";
     } else if (input === "AC") {
         clearDisplay();
-    } else if (input === "⌫") {
+    } else if (input === "⌫" || input === "Backspace") {
         backspaceExpression();
         backspaceDisplay();
-    } else if (input === "=") {
+    } else if (input === "=" || input === "Enter") {
         mathExpression.push({ number: currentNumber });
         //call operate on the numbers: *and / operater, then + -
         evaluateExpression: {
@@ -81,8 +91,10 @@ function backspaceDisplay(){
 function checkForDecimal(number) {
     if (number.includes(".")) {
         decimalButton.disabled = true;
+        noDecimal = false;
     } else {
         decimalButton.disabled = false;
+        noDecimal = true;
     }
 }
 
@@ -106,7 +118,7 @@ function roundToThousandths(number) {
 function sumOfSubExpression(index) {
     let current = mathExpression[index];
     let second = mathExpression[index + 1];
-    if (current.operator == '÷' && second.number == 0) {
+    if ((current.operator == '÷'||current.operator=='/')&& second.number == 0) {
         divisionByZero();
     }
     let sum = operate(current.number, current.operator, second.number);
@@ -120,8 +132,8 @@ function updateMathExpression(newNumber, currentIndex) {
     ...mathExpression.slice(currentIndex + 1)];
 }
 
-function checkMultiplyDivide(expressionObj) {
-    return expressionObj.operator === "x" || expressionObj.operator === "÷"
+function checkMultiplyDivide(obj) {
+    return obj.operator === "x"||obj.operator === "÷"||obj.operator === "*"||obj.operator === "/";
 }
 
 function appendDisplay(anotherValue) {
@@ -154,9 +166,11 @@ function operate(first, operator, second) {
             result = subtract(first, second);
             break;
         case 'x':
+        case '*':
             result = multiply(first, second);
             break;
         case '÷':
+        case '/':
             result = divide(first, second);
             break;
         default:
@@ -165,74 +179,3 @@ function operate(first, operator, second) {
     }
     return result;
 }
-
-   /* button.addEventListener('click', (e) => {
-        let input = button.textContent;
-
-        console.log("Beginning CurNum: " + currentNumber);
-
-        if (input !== '⌫') {
-            appendDisplay(input);
-        }
-        //if operator then save the number and operator
-        if (operators.test(input)) {
-            mathExpression.push({ number: currentNumber, operator: input });
-            currentNumber = "";
-            decimalButton.disabled = false;
-        } else if (input === "AC") {
-            clearDisplay();
-        } else if (input === "⌫") {
-            //CHANGE EXPRESSION
-            console.log("In Backspace");
-            currentNumber = currentNumber.toString();
-            if(currentNumber.length > 0) { //if current number isn't empty then bacspace current number
-                currentNumber = currentNumber.slice(0, currentNumber.length - 1);
-                console.log("Changing current Num Backspace: "+currentNumber);
-            } else if (mathExpression.length !== 0) {
-                //if operator isn't empty delete that
-                let lastIndex = mathExpression.length - 1;
-                //check operator and delete it
-                currentNumber = mathExpression[lastIndex].number;
-                mathExpression.pop();
-                console.table(mathExpression);
-            } 
-            //CHANGE DISPLAY
-            backspaceDisplay();
-            checkForDecimal(currentNumber.toString());
-            console.log("Current Number after Backspace: "+currentNumber);
-
-        } else if (input === "=") {
-            mathExpression.push({ number: currentNumber });
-
-            //call operate on the numbers: *and / operater, then + -
-            evaluateExpression: {
-                while (mathExpression.some(checkMultiplyDivide)) {
-                    let multOrDivideIndex = mathExpression.findIndex(checkMultiplyDivide);
-                    let sum = sumOfNumbersToRight(multOrDivideIndex);
-                    if (divideByZero === true) {
-                        break evaluateExpression;
-                    }
-                    updateMathExpression(sum, multOrDivideIndex);
-                    console.table(mathExpression);
-                }
-                while (mathExpression.length > 1) {
-                    let beginningIndex = 0;
-                    let sum = sumOfNumbersToRight(beginningIndex);
-                    updateMathExpression(sum, beginningIndex);
-                    console.table(mathExpression);
-                }
-                //dispay final number
-                mathExpression[0].number = roundToThousandths(mathExpression[0].number);
-                currentNumber = mathExpression[0].number;
-                display.textContent = currentNumber;
-                checkForDecimal(currentNumber.toString());
-                mathExpression = [];
-            }
-        } else { //done here so that the operators or the = string aren't added to the number
-            currentNumber += input;
-            console.log("Current Num: " + currentNumber);
-            checkForDecimal(currentNumber);
-        }
-        console.table(mathExpression);
-    })
-}) */

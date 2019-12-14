@@ -12,7 +12,6 @@ window.addEventListener('keydown', (e) => {
     let validInput = /\d|\.|Backspace|Enter/;
     
     if(validInput.test(keyInput)||operators.test(keyInput)) {
-        console.log(keyInput);
         if(keyInput !== '.' || noDecimal) {
             callCalculator(keyInput);
         }

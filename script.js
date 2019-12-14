@@ -11,7 +11,7 @@ let divideByZero = false;
 //display.textContent = "";
 
 buttons.forEach(button => {
-    button.addEventListener('click', (e) => {
+   /* button.addEventListener('click', (e) => {
         let input = button.textContent;
 
         console.log("Beginning CurNum: " + currentNumber);
@@ -28,6 +28,8 @@ buttons.forEach(button => {
             clearDisplay();
         } else if (input === "⌫") {
             //CHANGE EXPRESSION
+            console.log("In Backspace");
+            currentNumber = currentNumber.toString();
             if(currentNumber.length > 0) { //if current number isn't empty then bacspace current number
                 currentNumber = currentNumber.slice(0, currentNumber.length - 1);
                 console.log("Changing current Num Backspace: "+currentNumber);
@@ -42,6 +44,7 @@ buttons.forEach(button => {
             //CHANGE DISPLAY
             backspaceDisplay();
             checkForDecimal(currentNumber.toString());
+            console.log("Current Number after Backspace: "+currentNumber);
 
         } else if (input === "=") {
             mathExpression.push({ number: currentNumber });
@@ -77,7 +80,83 @@ buttons.forEach(button => {
         }
         console.table(mathExpression);
     })
-})
+}) */
+
+    button.addEventListener('click', callCalculator)})
+function callCalculator() {
+    //console.log(this.textContent)
+    
+    let input = this.textContent;
+
+    console.log("Beginning CurNum: " + currentNumber);
+
+    if (input !== '⌫') {
+        appendDisplay(input);
+    }
+    //if operator then save the number and operator
+    if (operators.test(input)) {
+        mathExpression.push({ number: currentNumber, operator: input });
+        currentNumber = "";
+        decimalButton.disabled = false;
+    } else if (input === "AC") {
+        clearDisplay();
+    } else if (input === "⌫") {
+        //CHANGE EXPRESSION
+        console.log("In Backspace");
+        currentNumber = currentNumber.toString();
+        if(currentNumber.length > 0) { //if current number isn't empty then bacspace current number
+            currentNumber = currentNumber.slice(0, currentNumber.length - 1);
+            console.log("Changing current Num Backspace: "+currentNumber);
+        } else if (mathExpression.length !== 0) {
+            //if operator isn't empty delete that
+            let lastIndex = mathExpression.length - 1;
+            //check operator and delete it
+            currentNumber = mathExpression[lastIndex].number;
+            mathExpression.pop();
+            console.table(mathExpression);
+        } 
+        //CHANGE DISPLAY
+        backspaceDisplay();
+        checkForDecimal(currentNumber.toString());
+        console.log("Current Number after Backspace: "+currentNumber);
+
+    } else if (input === "=") {
+        mathExpression.push({ number: currentNumber });
+
+        //call operate on the numbers: *and / operater, then + -
+        evaluateExpression: {
+            while (mathExpression.some(checkMultiplyDivide)) {
+                let multOrDivideIndex = mathExpression.findIndex(checkMultiplyDivide);
+                let sum = sumOfNumbersToRight(multOrDivideIndex);
+                if (divideByZero === true) {
+                    break evaluateExpression;
+                }
+                updateMathExpression(sum, multOrDivideIndex);
+                console.table(mathExpression);
+            }
+            while (mathExpression.length > 1) {
+                let beginningIndex = 0;
+                let sum = sumOfNumbersToRight(beginningIndex);
+                updateMathExpression(sum, beginningIndex);
+                console.table(mathExpression);
+            }
+            //dispay final number
+            mathExpression[0].number = roundToThousandths(mathExpression[0].number);
+            currentNumber = mathExpression[0].number;
+            display.textContent = currentNumber;
+            checkForDecimal(currentNumber.toString());
+            mathExpression = [];
+        }
+    } else { //done here so that the operators or the = string aren't added to the number
+        currentNumber += input;
+        console.log("Current Num: " + currentNumber);
+        checkForDecimal(currentNumber);
+    }
+    console.table(mathExpression);  
+} 
+
+
+
 
 function backspaceDisplay(){
     displayLength = display.textContent.length;

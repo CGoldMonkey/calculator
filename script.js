@@ -9,7 +9,7 @@ let noDecimal = true;
 
 window.addEventListener('keydown', (e) => {
     let keyInput = e.key;
-    let validInput = /\d|\.|Backspace|Enter/;
+    let validInput = /^[0-9]*$|\.|Backspace|Enter/;
     
     if(validInput.test(keyInput)||operators.test(keyInput)) {
         if(keyInput !== '.' || noDecimal) {
